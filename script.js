@@ -1,46 +1,38 @@
-// let user1Name = 'Rohan';
-// let user1Email = 'rm@gmail.com';
+//CLASSES - blueprint for object
 
 
-// let user2Name = 'Ren';
-// let user2Email = 'rem@gmail.com';
-
-
-// function login(email) {
-//     console.log(`${email} has logged in`)
-// }
-
-// login(user1Email)
-// login(user2Email)
-
-
-//The above code is called spaghetti code , so in order to store information in  a more streamlined manner , we can use objects to store data
-
-//USING OBJECT LITERALS
-let user1Details = {
-    name: "rohan",
-
-    //we are using getter method to update the property of the email dynamically when we update the name
-    get email() {
-        return `${ this.name}@gmail.com`
-    },
-    login: function () {
-        //'this' - keyword here makes a reference to the object , but if its declared outside the object then it would refer to the window object
-        console.log(`${this.email} logged in`)
+class User {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
     }
+    get email() {
+        return `${this.name}@gmail.com`
+    }
+    login() {
+        console.log(`${ this.email } has logged in`)
+        return this;
+    }
+    logout() {
+        console.log(`${ this.email } has logged out`)
+        return this;
+    }
+
 }
-user1Details.login()
-
-user1Details['name']='user1'
-console.log(user1Details)
-user1Details.age = 27
+const user1 = new User('Rohan', 27)
+const user2 = new User('Ren', 28)
 
 
-console.log(user1Details)
+//This creates a copy of the object
+const user3 = { ...user1 }
 
-user1Details.login()
+//This ensure that both the objects point to the same location in memory
+const user4 = user1
 
-let user2Details = {
-    name: "renm",
-    email:"rem@gmail.com"
-}
+user1.name = 'Alex'
+console.log(user3.name)
+
+console.log(`${ user1.name }:::${ user1.age }:::${ user1.email }`);
+
+console.log(user1.login().logout())
+console.log(user2)
