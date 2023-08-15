@@ -1,77 +1,47 @@
-//CLASSES - blueprint for object
+//Using prototypes
 
-//Class Inheritance - taking properties from base class to extract the functionality
-
-
-
-class User {
-    constructor(name, age) {
-        this.name = name;
-        this.age = age;
-    }
-    get email() {
-        return `${this.name}@gmail.com`
-    }
-    login() {
-        console.log(`${ this.email } has logged in`)
-        return this;
-    }
-    logout() {
-        console.log(`${ this.email } has logged out`)
-        return this;
-    }
-
+function User(email, name, login) {
+    this.email = email;
+    this.name = name;
+    this.online = false;
 }
 
-class developer extends User{
-    get language() {
-        return this
-    }
+//protoype functions can be attached to classes only and not their instances , instances can call prototype method with 
+User.prototype.login=function(){
+    this.online = true;
+    console.log(`${this.name} has logged in`)
+}
+
+User.prototype.logout=function(){
+    this.online = false;
+    console.log(`${this.name} has logged `)
 }
 
 
-//extending base class
-class Admin extends User {
-    deleteUser(user) {
+//Prototype Inheritance
+function Admin(...args) {
+    // console.log(args)
 
-        //filter creates a new array so it has to be assigned to a variable 
-        users = users.filter(u => {
-            return u.email != user.email;
+    //we are extending user class and usign this method to apply the functionality of user class to admin class
+    User.apply(this, args)
+    this.role= 'super user'
+
+    this.deleteUser= function(user){
+        users = users.filter((u) => {
+            return u.email!= user.email
         })
     }
-
-    //adding users
-    addUser(name, age) {
-        const user4 = new User(name, age);
-        users.push(user4)
-    }
 }
 
-const user1 = new User('Rohan', 27)
-const user2 = new User('Ren', 28)
-const user3 = { ...user1 };
 
-
-let users = [user1,user2, user3]
-const admin1 = new Admin("Steve", 35);
-
-admin1.addUser("New Employee", 45)
+let user1 = new User('user1@gmail.com', "user One", false)
+let user2 = new User('user2@gmail.com', "user Two", false)
+let admin = new Admin("admin@gmail.com", "New admin", false)
+let users = [user1,user2, admin]
+console.log(admin)
+user1.login()
+user1.logout()
 console.log(users)
-admin1.deleteUser(user1)
-
+admin.deleteUser(user1)
 console.log(users)
-// //This creates a copy of the object
-// const user3 = { ...user1 }
-
-// //This ensure that both the objects point to the same location in memory
-// const user4 = user1
-
-// user1.name = 'Alex'
-// console.log(user3.name)
-
-// console.log(`${ user1.name }:::${ user1.age }:::${ user1.email }`);
-
-// console.log(user1.login().logout())
-// console.log(user2)
-
 
