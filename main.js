@@ -1,114 +1,100 @@
-// //Prototypal Inheritance and Prototypal Chain
-
-// //ES6 introduced classes which is modern way to construct objects
-
-// //That said prototypal inheritance and chain are :;
-// //1) classes are sysntactic sugar implementing prototypal inheritance and chain
+//Official Def of Recursion
+// In CS recursion is the method to solve a problem by solving smaller instances of the same problem
 
 
-// //Object Literals
 
-// const person = {
-//     alive : true
-// }
+//Any interator function can be written as Recursive 
 
-
-// const musician = {
-//     plays:true
-// }
-
-// //in order to implement inheritance from person to musician we can use __proto__
-
-// // musician.__proto__ = person;
-
-// // console.log(musician.plays)
-// // console.log(musician.alive)
-// // //we can do the above for person as well
-
-// // console.log(person)
-
-
-// //Above was the older way of doing things , JS has now getPrototypeOf and setPrototypeOf methods instead of using __proto__
-
-// Object.setPrototypeOf(musician, person)
-
-// // console.log(person)
-// // console.log(Object.getPrototypeOf(musician))
-// // console.log(musician.__proto__)
-
-// // //we can also use === operator to check their equality
-
-// // console.log(Object.getPrototypeOf(musician) === musician.__proto__)
-// // // output - true
-
-
-// const guitarist = {
-//     strings: 6, 
-//     __proto__ : musician
-// }
-
-// console.log(guitarist)
-
-// console.log(guitarist.alive)
-// console.log(guitarist.plays)
-// console.log(guitarist.strings)
-
-//--------------------------------------------------
-
-
-//An object can directly inherit only from one Object
-
-const car = {
-    doors: 2,
-    seats: "vinyl",
-    get seatMaterial(){
-        return this.seats
-    },
-
-    //setters take one parameter
-    set seatMaterial(material) {
-        this.seats = material
+const counter=(num)=>{
+    while (num > 0){
+        console.log(num);
+        num-=1
     }
 }
 
-const luxuryCar = {}
+// counter(10)
 
-// Object.setPrototypeOf(luxuryCar, car);
-// luxuryCar.seatMaterial="leather"
-// console.log(luxuryCar)
-// //get keys of an object
-// console.log(Object.values(luxuryCar))
+//Recursive functions have 2 calls - 
+// 1 - Recursive call to the function 
+// 2 - at least one conditon to exit
 
-// //forEach will not extract inherit props
-// Object.keys(luxuryCar).forEach(key => console.log(key))
+const recurCounter = (num) => {
 
-
-// //But a for .. in loop includes inherited props
-// for (let key in luxuryCar) {
-//     console.log(key)
-// }
-//-----------------------------------------------------------
-//Object Constructors
-function Animal(species) {
-    this.species = species;
-    this.eats = true
+    //exit condition
+    if (num < 0) {
+        return
+    }
+    console.log(num);
+    num -= 1
+    //recursive call
+    recurCounter(num)
 }
 
-// In case of arrow functions the this keyword does not change as it is not bound to the refreence so it remains undefined , therefor its better to use regular functions
+// recurCounter(11)
 
-// Animal.prototype.walk=()=>{
-//     console.log(`${species} is walkings`)
-// }
+// --------------------------------------------------------
 
 
-Animal.prototype.walk= function(){
-    console.log(`${this.species} is walking`)
+//Standard example of recursion sample codes
+
+
+//Without recursion fibonacci
+
+const withoutRecurFibo = (num, array=[0,1]) => {
+    while (num > 2){
+        const [nextToLast, Last] = array.slice(-2);
+        array.push(nextToLast+ Last);
+        num-=1
+    }
+
+    return array
+    // return array[num]
 }
 
-//New instance from Animal constructors
-const tiger = new Animal('tiger')
-console.log(tiger)
-console.log(tiger.walk())
+// console.log(withoutRecurFibo(12))
+
+//Fibo with Recur
+
+const withRecurFibo = (num, array=[0,1]) => {
+    if (num <= 2) return array;
+    const [nextToLast, Last] = array.slice(-2);
+    console.log([...array])
+    console.log(nextToLast,Last)
+    return withRecurFibo(num-1, [...array, nextToLast+Last])
+}
+
+// console.log(withRecurFibo(12))
 
 
+//Return the nth position of the fibonacci sequence
 
+// Without recur
+
+const withoutRecur = (pos) => {
+    if (pos <= 1) return pos;
+    const seq = [0, 1]
+    for (let i = 2; i <= pos; i++){
+        const [nextToLast, last] = seq.slice(-2);
+        seq.push(nextToLast + last);
+    }
+
+    return seq[pos];
+}
+
+// console.log(withoutRecur(6))
+
+
+//With Recursion
+
+// const withRecur = (pos) => {
+//     if (pos <= 1) return pos;
+//     //Test code
+//     console.log(withRecur(pos-1))
+//     console.log(withRecur(pos-2))
+//     return withRecur(pos-1)+withRecur(pos-2)
+// }
+
+const withRecur = pos => pos<2?pos:withRecur(pos-1)+withRecur(pos-2)
+
+
+console.log(withRecur(7))
