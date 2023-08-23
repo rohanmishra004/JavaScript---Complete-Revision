@@ -1,96 +1,98 @@
-//JS 
+// //Currying
 
-// Decorators function weap a function into another function
+// // Named after Haskell Curry
 
-//These wrappers 'decorate' the original function with new capabilities
+// //Concept from Lambda Calculus
 
+// //Currying takes a function that receives more than one parameter and breaks it into a series of unary(one parameter) functions
 
+// //A curried funtion takes only one parameter at a time 
 
-
-//Ex -1 - Using closures to log how many times a function is called 
-
-let sum = (...args) => {
-    return [...args].reduce((acc,num)=>acc+num)
-}
-
-const callCounter = (fn) => {
-    let count = 0;
-
-    return (...args) => {
-        console.log(`Sum has been called ${count += 1 } times`)
-        return fn(...args)
-    }
-}
-
-// sum = callCounter(sum)
-// console.log(sum(1,2,4,5))
-// console.log(sum(1,2,5))
+// //Example 1
 
 
-//Example 2 - Check for valid data and number of params
-let rectArea = (length, width) => {
-    return length*width
-}
+// // const buildBurger = (ingredient1) => {
+// //     return (ingredient2) => {
+// //         return `${ingredient1},${ingredient2}`
+// //     }
+// // }
+
+// //Refactored above code
+// const buildBurger = (ingredient1)=>(ingredient2)=>(ingredient3)=>`${ingredient1},${ingredient2}, ${ingredient3}`
+
+// const myBurger = buildBurger('Bacon')('lettuce')('buns')
+// console.log(myBurger)
 
 
-const countParams = (fn) => {
-    return (...args) => {
-        if (args.length !== fn.length) {
-            throw new Error('Incorrrct number of params ', fn.name)
+// //Example 2
+
+// const mult = (x, y) => { return x * y }
+
+// const multiplyCurry = (x) => (y) => { return x * y }
+
+// console.log(mult(10, 2))
+// console.log(multiplyCurry(10)(3))
+
+// //we can also create additional functions from currying
+
+// const newMulti = multiplyCurry(10)
+// console.log(newMulti(6))
+
+
+// //Another example  - in this we can provide an id value and a header value to update the two fields simultaneously 
+// const updateEle = id => content => document.querySelector(`#${ id }`).textContent = content
+
+// updateEle('headerId')('New Heading')
+
+// //Another common use of currying is function composition - allows calling small functions in a specific order 
+
+// const addCust = fn => (...args) => {
+//     console.log('Serving customer info')
+//     return fn(...args)
+// }
+
+// const processOrder = fn => (...args) => {
+//     console.log(`processing order #${ args[0] }`)
+//     return fn(...args)
+// }
+
+// let completeOrder = (...args) => {
+//     console.log(`Order #${[...args].toString()} completed.`)
+// }
+
+// completeOrder = (processOrder(completeOrder));
+// console.log(completeOrder)
+// completeOrder = addCust(completeOrder)
+// completeOrder('1000')
+
+
+// //without currying
+
+// function addCust(...args) {
+//     return function processOrder(...args) {
+//         return function completeOrder(...args) {
+//             //end
+//         }
+//     }
+// }
+
+
+
+// Requires a function with a fixed number of parameters
+const curry = (fn) => {
+    console.log(fn.length)
+    return curried = (...args) => {
+        console.log(args.length)
+        if (fn.length !== args.length) {
+            console.log(curried)
+            return curried.bind(null,...args)
+            //bind creates a new function
+          
         }
-
         return fn(...args)
     }
 }
 
-
-const reqInteger = (fn) => {
-    return (...params) => {
-        params.forEach(param => {
-            if (!Number.isInteger(param)) {
-                throw new Error(`Params for ${fn.name} should be integer`)
-            }
-        })
-        return fn(...params)
-    }
-}
-
-
-// rectArea = countParams(rectArea)
-// rectArea = reqInteger(rectArea)
-
-// console.log(rectArea(10,"20"))
-
-
-
-//Example 3 - Decorating API calls functions 
-//Time data requests during developement
-let url = "https://jsonplaceholder.typicode.com/todos/42"
-let reqData = async (url) => {
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-
-let dataResonseTime = (fn) => {
-    return async (url) => {
-        console.time('fn');
-        const data = await fn(url);
-        console.timeEnd('fn');
-        return data
-    }
-}
-
-
-const testFunction = async () => {
-    reqData = dataResonseTime(reqData);
-    const data = await reqData(url);
-    console.log(data)
-}
-
-testFunction()
+const total = (x, y) => x + y ;
+const curriedTotal = curry(total);
+console.log(curriedTotal(10)(30))
