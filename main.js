@@ -1,28 +1,38 @@
-//Debouncing - Debounce prevents functions from being called too soon 
+//Throttle and Debounce both help to improve the function of the web app
 
-const initApp = () => {
-    const button = document.querySelector('button');
-    button.addEventListener('click',debounce(clicklog, 2000));
+
+const init = () => {
+    const button = document.querySelector('button')
+    button.addEventListener('click',throttle(clicked,2000))
 }
 
-
-const clicklog = () => console.log('clicked');
-
-//This ensures that once HTML document has finished loading then the init function is triggered
-
-document.addEventListener('DOMContentLoaded', initApp)
+const clicked = () => {
+    console.log('clicked')
+};
 
 
-//we will create a debounce function to prevent the button clicked to be triggered quickly in succession
+document.addEventListener('DOMContentLoaded', init)
 
-const debounce = (fn, delay) => {
-    let id;
-    console.log(`id at immediate load::${ id }`)
+//Throttle ignore repeated calls to the function until the interval is reached
+const throttle = (fn,delay) => {
+    let lastTime = 0;
+    console.log('called Throttle');
+    let id =0
     return (...args) => {
-        console.log(`Previous Id::${ id }`)
-        if (id) clearTimeout(id);
-        id = setTimeout(() => {
-            fn(...args);
-        }, delay)
+        const now = new Date().getTime();
+        //The time hast expired so we cannot retrigger the function again
+        id++;
+        if (now - lastTime < delay) {
+            return 
+        }
+        lastTime = now;
+        console.log(`Event Id :${id}`)
+        fn(...args);
+
     }
 }
+
+
+//Debounce - useful when we want the function at the end of an event
+
+//Throttle - useful we we want the function to be triggered at certain intervals or intermediate states
